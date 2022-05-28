@@ -6,14 +6,14 @@
   </head>
   <style>
       html, body { height: 100%; width: 100% }
-      body { margin: 0; padding: 5px; }
+      body { margin: 0; padding: 0; font-family: "Open Sans", sans-serif; }
       *, *::before, *::after { box-sizing: border-box; }
-      p {
+      #number-list {
           word-wrap: break-word;
           max-width: 20ch;
           font: 4rem monospace;
           width: auto;
-        }
+      }
       button {
         background: #097f8e;
         border-radius: 5px;
@@ -24,19 +24,91 @@
         font: normal normal 3rem/1 "Open Sans", sans-serif;
         text-align: center;
       }
-      .main {
+      main {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+      section {
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 100px;
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
+      }
+      section#numbers-section {
         justify-content: space-evenly;
       }
+      section#list-section {
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        padding-bottom: 150px;
+      }
+      footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+      }
+      nav {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 40rem;
+      }
+      nav span {
+        cursor: default;
+        font-size: 2.7rem;
+      }
+      [data-selected="selected"] {
+        border-bottom: 7px #222222 solid;
+      }
+      h1 { font-size: 3rem; }
+      textarea {
+        column-fill: balance;
+        height: 30%;
+        width: 50%;
+        font-size: 3rem;
+        border: solid 4px #222222;
+        caret-color: black;
+        padding: 10px;
+      }
+      #shuffle-list-button { margin-top: 30px; }
   </style>
   <body>
-    <div class="main">
-        <p id="num">This is my page</p>
-        <button type="button" id="shuffle-button">SHUFFLE</button>
-    </div>
-  </body>
+    <main>
+      <section id="numbers-section">
+        <p id="number-list"></p>
+        <button type="button" id="shuffle-numbers-button">SHUFFLE</button>
+      </section>
+      <section id="list-section" style="display: none">
+        <h1>TEXT TO RANDOMIZE</h1>
+        <textarea id="items-to-randomize"
+                  autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>
+        <h1>RANDOMIZED TEXT</h1>
+        <textarea id="randomized-items"
+                  autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>
+        <button type="button" id="shuffle-list-button">SHUFFLE</button>
+      </section>
+    </main>
+    <footer>
+      <nav>
+        <span id="numbers" data-selected="selected">NUMBERS</span>
+        <span id="list" data-selected="">LIST</span>
+      </nav>
+    </footer>
+</body>
   <script>
     const numbers = [
         "00","01","02","03","04","05","06","07","08","09",
@@ -58,18 +130,60 @@
             array[m] = array[i];
             array[i] = t;
         }
-        return array;
     }
   </script>
   <script>
-      window.onload = () => { reshuffle(); };
-      function reshuffle () {
-        const a = document.getElementById('num');
+      function shuffleNumbers () {
         shuffle(numbers);
-        a.innerHTML = numbers.join('');
+        document.getElementById('number-list').innerHTML = numbers.join('');
       }
-      document.getElementById('shuffle-button').addEventListener('click', e => {
-        reshuffle();
+      document.getElementById('shuffle-numbers-button').addEventListener('click', e => {
+        shuffleNumbers();
       });
   </script>
+  <script>
+      function shuffleList () {
+        let a = itemsToRandomize.value.split('');
+        shuffle(a);
+        randomizedItemsResults.value = a.join('');
+      }
+      document.getElementById('shuffle-list-button').addEventListener('click', e => {
+        shuffleList();
+      });
+
+      const itemsToRandomize = document.getElementById('items-to-randomize');
+      itemsToRandomize.addEventListener('click', e => {
+        itemsToRandomize.focus();
+        itemsToRandomize.select();
+      });
+
+      const randomizedItemsResults = document.getElementById('randomized-items');
+      randomizedItemsResults.addEventListener('click', e => {
+        randomizedItemsResults.focus();
+        randomizedItemsResults.select();
+      });
+  </script>
+  <script>
+    window.onload = () => { shuffleNumbers(); };
+    const numbersSection = document.getElementById('numbers-section');
+    const listSection = document.getElementById('list-section');
+    const numbersButton = document.getElementById('numbers');
+    const listButton = document.getElementById('list');
+    numbersButton.addEventListener('click', e => {
+      if (numbersButton.dataset.selected != "selected") {
+        numbersButton.dataset.selected = "selected";
+        listButton.dataset.selected = "";
+      }
+      listSection.style.display = "none";
+      numbersSection.style.display = "flex";
+    });
+    listButton.addEventListener('click', e => {
+      if (listButton.dataset.selected != "selected") {
+        numbersButton.dataset.selected = "";
+        listButton.dataset.selected = "selected";
+      }
+      numbersSection.style.display = "none";
+      listSection.style.display = "flex";
+    });
+</script>
 </html>
