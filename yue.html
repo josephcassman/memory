@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="yue-hant" dir="ltr" xml:lang="yue-hant">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>Read Cantonese</title>
+  </head>
+  <style>
+      html, body { height: 100%; width: 100% }
+      body {margin: 0;padding: 0;font-family: "Open Sans", sans-serif; }
+      body { display: flex; flex-flow: column nowrap; align-items: center; }
+      *, *::before, *::after { box-sizing: border-box; }
+      main {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: start;
+        flex-grow: 1;
+        height: calc(100vh - 100px);
+        width: 100%;
+        padding-top: 10px;
+      }
+      footer {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        height: 100px;
+        width: 100%;
+      }
+      textarea {
+        width: 70vw;
+        height: 70vh;
+        font-size: 3rem;
+        border: solid 4px #222222;
+        caret-color: black;
+        padding: 10px;
+        border-radius: 3px;
+        column-fill: balance;
+      }
+      textarea::placeholder {
+        font-size: 2.5rem;
+      }
+      p {
+        margin: 0;
+        padding: 0;
+        width: 98vw;
+        height: 100%;
+        font-size: 3rem;
+        overflow-y: auto;
+      }
+      button {
+        background: #097f8e;
+        border-radius: 5px;
+        border: transparent;
+        padding: 10px 35px;
+        color: #ffffff;
+        display: inline-block;
+        font: normal normal 3rem/1 "Open Sans", sans-serif;
+        text-align: center;
+        line-height: 3.2rem;
+      }
+  </style>
+  <body lang="yue-hant" dir="ltr" xml:lang="yue-hant">
+    <main>
+        <textarea id="one"
+                  placeholder="Copy Chinese text here. Click the SET button. Then use the web browser to read the text."></textarea>
+        <p id="two" style="display: none"></p>
+    </main>
+    <footer>
+      <button id="set-reset-button" aria-hidden="true">SET</button>
+    </footer>
+</body>
+<script>
+    let setResetButton = document.getElementById('set-reset-button');
+    let one = document.getElementById('one');
+    let two = document.getElementById('two');
+    setResetButton.addEventListener('click', e => {
+        if (setResetButton.innerText == "SET") {
+            setResetButton.innerText = "RESET";
+            two.innerText = one.value;
+            one.style.display = "none";
+            two.style.display = "flex";
+        }
+        else {
+            setResetButton.innerText = "SET";
+            one.value = "";
+            two.style.display = "none";
+            one.style.display = "flex";
+        }
+    });
+</script>
+</html>
